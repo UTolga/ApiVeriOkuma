@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch</title>
+  </head>
+  <body>
+    <div class="container"></div>
+
+    <script>
+      //   async function getCategories() {
+      //     let url = "https://northwind.vercel.app/api/categories";
+      //     try {
+      //       let res = await fetch(url);
+      //       return await res.json();
+      //     } catch (error) {
+      //       console.log(error);
+      //     }
+      //   }
+
+      //   async function renderCategories() {
+      //     let categories = await getCategories();
+      //     let html = "";
+
+      //     categories.forEach((category) => {
+      //       let htmlSegment = `<div class="user"><h2>${category.id} ${category.name} ${category.description}</h2></div>`;
+
+      //       html += htmlSegment;
+
+      //       let container = document.querySelector(".container");
+
+      //       container.innerHTML = html;
+      //     });
+      //   }
+
+      //   console.log(getCategories());
+      //   renderCategories();
+
+      //ÜST KISIMDAKİ KODLAR CATEGORİLER İÇİN YAZILDI
+
+
+
+      
+      async function getProducts() {
+        // API VERİLERİ ÇEKMEK İÇİN BU ŞEKİLDE BİR FONKSİYON OLUŞTURABİLİRİZ FOR PRODUCTS
+        let url = "https://northwind.vercel.app/api/products";
+        try {
+          let res = await fetch(url);
+          return await res.json();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      async function getSuppliers() {
+        // API VERİLERİ ÇEKMEK İÇİN BU ŞEKİLDE BİR FONKSİYON OLUŞTURABİLİRİZ FOR SUPPLIER
+        let url = "https://northwind.vercel.app/api/suppliers";
+        try {
+          let res = await fetch(url);
+          let suppliers = await res.json();
+          return suppliers;
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      async function renderProducts() {
+        // BURADA DA ÇEKİLEN VERİLERİ HTML İÇİNDE GÖSTERİYORUZ
+        let products = await getProducts();
+        let suppliers = await getSuppliers();
+        let html = "";
+
+        products.forEach((product) => {
+          let supplier = suppliers.find((s) => s.id === product.supplierId);
+          let supplierCompanyName;
+
+          if (supplier) {
+            supplierCompanyName = supplier.companyName;
+          } else {
+            supplierCompanyName = "Not Available";
+          }
+
+          let htmlSegment = `<div class="products"> 
+            <ul class="product-list">
+              <li><b>Product ID:</b> ${product.id}</li>
+              <li><b>Product Name:</b> ${product.name}</li>
+              <li><b>Unit Price:</b> ${product.unitPrice}</li>
+              <li><b>Units In Stock:</b> ${product.unitsInStock}</li>
+              <li><b>Supplier ID:</b> ${product.supplierId}</li>
+              <li><b>Supplier Company:</b> ${supplierCompanyName}</li>
+              
+              </ul>
+            </div>`;
+
+          html += htmlSegment;
+
+          let container = document.querySelector(".container");
+
+          container.innerHTML = html;
+        });
+      }
+
+      renderProducts();
+
+
+
+    </script>
+
+    <style>
+      .product-list {
+        list-style-type: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+      }
+
+      .product-list li {
+        margin-left: 60px;
+        width: 150px;
+      }
+    </style>
+  </body>
+</html>
